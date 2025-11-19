@@ -123,7 +123,7 @@ function App() {
               onClick={handleGetStarted}
               className="bg-amber-700 hover:bg-amber-800 text-white px-12 py-4 rounded-full text-lg font-semibold transition-all duration-300 hover:scale-105 shadow-xl"
             >
-              Get Startedd
+              Get Started
             </button>
 
             <div className="mt-12 animate-bounce">
