@@ -1,5 +1,8 @@
-import { Sparkles, Heart, Flame, Moon, Sun, Leaf, MessageCircle, Users, BookOpen, Headphones, ArrowRight, Check, Star } from 'lucide-react';
+import { Sparkles, Heart, Flame, Moon, Sun, Leaf, MessageCircle, Users, BookOpen, Headphones, ArrowRight, Check, Star, Zap, Target, TrendingUp, Award } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import PayPalButton from './PayPalButton';
+import { useRef } from 'react';
+import Footer from './footer';
 
 interface HomeProps {
   onNavigate: (page: 'home' | 'about' | 'services' | 'contact') => void;
@@ -17,7 +20,7 @@ export default function Home({ onNavigate }: HomeProps) {
 
         <div className="max-w-6xl mx-auto px-6 relative z-10">
           <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 bg-amber-100 border border-amber-300 text-amber-800 px-5 py-2 rounded-full text-sm font-semibold mb-8 shadow-sm">
+            <div className="inline-flex items-center gap-2 bg-amber-100 border border-amber-300 text-amber-800 px-5 py-2 rounded-full text-sm font-semibold mb-8 shadow-sm animate-bounce">
               <Sparkles className="w-4 h-4" />
               6-Week Immersion Program
             </div>
@@ -29,7 +32,7 @@ export default function Home({ onNavigate }: HomeProps) {
             </p>
           </div>
 
-          <div className="bg-white rounded-3xl p-10 md:p-14 shadow-2xl border border-neutral-200 mb-12 max-w-4xl mx-auto">
+          <div className="bg-white rounded-3xl p-10 md:p-14 shadow-2xl border border-neutral-200 mb-12 max-w-4xl mx-auto hover:shadow-3xl transition-shadow duration-500">
             <p className="text-xl text-neutral-700 mb-6 leading-relaxed">
               You know the feeling — you set the goal, you make the plan, you feel the fire…
             </p>
@@ -62,6 +65,9 @@ export default function Home({ onNavigate }: HomeProps) {
         </div>
       </section>
 
+      {/* ---------- Stats Section ---------- */}
+      <StatsSection />
+
       {/* ---------- Journey Section ---------- */}
       <section className="py-24 bg-white">
         <div className="max-w-6xl mx-auto px-6">
@@ -80,6 +86,12 @@ export default function Home({ onNavigate }: HomeProps) {
           </div>
         </div>
       </section>
+
+      {/* ---------- Features Grid ---------- */}
+      <FeaturesGrid />
+
+      {/* ---------- Transformation Timeline ---------- */}
+      <TransformationTimeline />
 
       {/* ---------- Pricing Section ---------- */}
       <section className="py-24 bg-gradient-to-br from-stone-100 via-neutral-50 to-amber-50">
@@ -108,13 +120,11 @@ export default function Home({ onNavigate }: HomeProps) {
               ]}
               popular
             >
-             <PayPalButton
-  id="paypal-small-group"
-  amount="995.00"
-  onSuccess={(details) => alert(`Small Group Paid by ${details.payer.name.given_name}`)}
-/>
-
-
+              <PayPalButton
+                id="paypal-small-group"
+                amount="995.00"
+                onSuccess={(details) => alert(`Small Group Paid by ${details.payer.name.given_name}`)}
+              />
             </PricingCard>
 
             {/* One-on-One Coaching */}
@@ -134,22 +144,332 @@ export default function Home({ onNavigate }: HomeProps) {
               premium
             >
               <PayPalButton
-  id="paypal-one-on-one" // unique
-  amount="1195.00"
-  onSuccess={(details) => console.log("One-on-One Paid:", details)}
-/>
+                id="paypal-one-on-one"
+                amount="1195.00"
+                onSuccess={(details) => console.log("One-on-One Paid:", details)}
+              />
             </PricingCard>
           </div>
         </div>
       </section>
+
+      {/* ---------- Testimonials ---------- */}
+      <TestimonialsSection />
 
       <Footer onNavigate={onNavigate} />
     </>
   );
 }
 
-// ------------------ Components ------------------
+// ------------------ Stats Section ------------------
+function StatsSection() {
+  return (
+    <section className="py-16 bg-gradient-to-r from-amber-700 to-stone-700">
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="grid md:grid-cols-4 gap-8">
+          <StatCard number="6" label="Week Program" icon={<Zap className="w-8 h-8" />} />
+          <StatCard number="100+" label="Lives Transformed" icon={<Target className="w-8 h-8" />} />
+          <StatCard number="95%" label="Success Rate" icon={<TrendingUp className="w-8 h-8" />} />
+          <StatCard number="24/7" label="Support Available" icon={<Heart className="w-8 h-8" />} />
+        </div>
+      </div>
+    </section>
+  );
+}
 
+function StatCard({ number, label, icon }: any) {
+  const [count, setCount] = useState(0);
+  const targetNumber = parseInt(number);
+
+  useEffect(() => {
+    if (isNaN(targetNumber)) return;
+    
+    const duration = 2000;
+    const steps = 60;
+    const increment = targetNumber / steps;
+    let current = 0;
+
+    const timer = setInterval(() => {
+      current += increment;
+      if (current >= targetNumber) {
+        setCount(targetNumber);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(current));
+      }
+    }, duration / steps);
+
+    return () => clearInterval(timer);
+  }, [targetNumber]);
+
+  return (
+    <div className="text-center group hover:scale-110 transition-transform duration-300">
+      <div className="text-white mb-3 flex justify-center opacity-80 group-hover:opacity-100 transition-opacity">
+        {icon}
+      </div>
+      <div className="text-5xl font-extrabold text-white mb-2">
+        {isNaN(targetNumber) ? number : count}
+        {number.includes('+') && '+'}
+        {number.includes('%') && '%'}
+      </div>
+      <div className="text-amber-100 font-semibold">{label}</div>
+    </div>
+  );
+}
+
+// ------------------ Features Grid ------------------
+function FeaturesGrid() {
+  const features = [
+    {
+      icon: <Flame className="w-10 h-10" />,
+      title: "Break the Pattern",
+      description: "Identify and dissolve the unconscious patterns that keep you stuck",
+      color: "from-red-500 to-orange-500"
+    },
+    {
+      icon: <Moon className="w-10 h-10" />,
+      title: "Deep Inner Work",
+      description: "Guided meditations and reflections to access your deeper wisdom",
+      color: "from-indigo-500 to-purple-500"
+    },
+    {
+      icon: <Sun className="w-10 h-10" />,
+      title: "Emerge Empowered",
+      description: "Step into authentic confidence and self-leadership",
+      color: "from-amber-500 to-yellow-500"
+    },
+    {
+      icon: <Leaf className="w-10 h-10" />,
+      title: "Sustainable Growth",
+      description: "Build lasting habits and mindset shifts that stick",
+      color: "from-green-500 to-emerald-500"
+    }
+  ];
+
+  return (
+    <section className="py-24 bg-gradient-to-br from-neutral-50 to-stone-50">
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {features.map((feature, idx) => (
+            <FeatureCard key={idx} {...feature} delay={idx * 150} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FeatureCard({ icon, title, description, color, delay }: any) {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsVisible(true), delay);
+    return () => clearTimeout(timer);
+  }, [delay]);
+
+  return (
+    <div 
+      className={`bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 border border-neutral-200 hover:scale-105 ${
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+      }`}
+    >
+      <div className={`bg-gradient-to-br ${color} text-white p-4 rounded-xl mb-4 inline-block`}>
+        {icon}
+      </div>
+      <h3 className="text-xl font-bold text-neutral-900 mb-3">{title}</h3>
+      <p className="text-neutral-600 leading-relaxed">{description}</p>
+    </div>
+  );
+}
+
+// ------------------ Transformation Timeline ------------------
+function TransformationTimeline() {
+  const weeks = [
+    { week: 1, title: "Awareness", description: "Uncover your patterns and triggers" },
+    { week: 2, title: "Understanding", description: "Learn why you self-sabotage" },
+    { week: 3, title: "Release", description: "Let go of what no longer serves you" },
+    { week: 4, title: "Rebuild", description: "Create new empowering beliefs" },
+    { week: 5, title: "Practice", description: "Embody your new way of being" },
+    { week: 6, title: "Integration", description: "Step fully into your power" }
+  ];
+
+  return (
+    <section className="py-24 bg-white">
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="text-center mb-16">
+          <h2 className="text-5xl font-extrabold text-neutral-900 mb-4">Your 6-Week Journey</h2>
+          <p className="text-xl text-neutral-600">Each week builds on the last, creating lasting transformation</p>
+        </div>
+
+        <div className="relative">
+          <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-gradient-to-b from-amber-500 to-stone-400"></div>
+          
+          <div className="space-y-12">
+            {weeks.map((week, idx) => (
+              <TimelineItem key={idx} {...week} isLeft={idx % 2 === 0} />
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function TimelineItem({ week, title, description, isLeft }: any) {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [visible, setVisible] = useState(false);
+  const [count, setCount] = useState(0);
+
+  // Intersection Observer
+  useEffect(() => {
+    if (!ref.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            setVisible(true);
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+
+    observer.observe(ref.current);
+
+    return () => {
+      if (ref.current) observer.unobserve(ref.current);
+    };
+  }, []);
+
+  // Animate number counting
+  useEffect(() => {
+    if (!visible) return;
+
+    let start = 0;
+    const duration = 800;
+    const stepTime = 50;
+    const steps = Math.ceil(duration / stepTime);
+    const increment = week / steps;
+
+    const counter = setInterval(() => {
+      start += increment;
+      if (start >= week) {
+        setCount(week);
+        clearInterval(counter);
+      } else {
+        setCount(Math.floor(start));
+      }
+    }, stepTime);
+
+    return () => clearInterval(counter);
+  }, [visible, week]);
+
+  return (
+    <div ref={ref} className={`flex items-center ${isLeft ? 'flex-row' : 'flex-row-reverse'} gap-8`}>
+      <div className={`flex-1 ${isLeft ? 'text-right' : 'text-left'}`}>
+        <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 border border-neutral-200 hover:scale-105 inline-block">
+          <div
+            className={`font-bold mb-2 transition-all duration-700 ${
+              visible ? 'text-amber-500 text-2xl scale-110' : 'text-neutral-400 text-xl'
+            }`}
+          >
+            Week {count}
+          </div>
+          <h3 className="text-2xl font-bold text-neutral-900 mb-2">{title}</h3>
+          <p className="text-neutral-600">{description}</p>
+        </div>
+      </div>
+
+      <div className="relative z-10">
+        <div
+          className={`w-12 h-12 rounded-full flex items-center justify-center font-bold shadow-lg text-white text-lg transition-all duration-700 ${
+            visible
+              ? 'bg-gradient-to-br from-amber-500 to-stone-400 scale-125 shadow-xl animate-pulse'
+              : 'bg-neutral-300 text-neutral-500 scale-100'
+          }`}
+        >
+          {count}
+        </div>
+      </div>
+
+      <div className="flex-1"></div>
+    </div>
+  );
+}
+
+
+// ------------------ Testimonials ------------------
+function TestimonialsSection() {
+  const testimonials = [
+    {
+      name: "Sarah M.",
+      role: "Entrepreneur",
+      text: "This program completely transformed how I show up for myself. I finally broke through the patterns that were holding me back for years.",
+      rating: 5
+    },
+    {
+      name: "Jessica L.",
+      role: "Creative Professional",
+      text: "The weekly sessions and community support gave me the courage to finally pursue my dreams without fear holding me back.",
+      rating: 5
+    },
+    {
+      name: "Amanda K.",
+      role: "Business Owner",
+      text: "I learned to trust myself again. The tools and insights from this program have become part of my daily life.",
+      rating: 5
+    }
+  ];
+
+  return (
+    <section className="py-24 bg-gradient-to-br from-amber-50 to-stone-50">
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="text-center mb-16">
+          <h2 className="text-5xl font-extrabold text-neutral-900 mb-4">Success Stories</h2>
+          <p className="text-xl text-neutral-600">See what others have achieved</p>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-8">
+          {testimonials.map((testimonial, idx) => (
+            <TestimonialCard key={idx} {...testimonial} delay={idx * 200} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function TestimonialCard({ name, role, text, rating, delay }: any) {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsVisible(true), delay);
+    return () => clearTimeout(timer);
+  }, [delay]);
+
+  return (
+    <div 
+      className={`bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-neutral-200 hover:scale-105 ${
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+      }`}
+    >
+      <div className="flex gap-1 mb-4">
+        {[...Array(rating)].map((_, i) => (
+          <Star key={i} className="w-5 h-5 fill-amber-500 text-amber-500" />
+        ))}
+      </div>
+      <p className="text-neutral-700 mb-6 italic">"{text}"</p>
+      <div>
+        <div className="font-bold text-neutral-900">{name}</div>
+        <div className="text-sm text-neutral-600">{role}</div>
+      </div>
+    </div>
+  );
+}
+
+// ------------------ Pricing Card ------------------
 function PricingCard({ 
   title, icon, originalPrice, discountedPrice, features, popular, premium, children 
 }: any) {
@@ -198,52 +518,9 @@ function PricingCard({
         ))}
       </ul>
 
-      {/* PayPal Button */}
       {children && <div className="mt-4">{children}</div>}
 
       <p className="text-center text-sm text-neutral-500 mt-4">Payment plans available</p>
     </div>
-  );
-}
-
-function Footer({ onNavigate }: { onNavigate: (page: 'home' | 'about' | 'services' | 'contact') => void }) {
-  return (
-    <footer className="bg-neutral-900 text-neutral-300 py-16">
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="grid md:grid-cols-3 gap-12 mb-12">
-          <div>
-            <h3 className="text-2xl font-bold text-white mb-6 bg-gradient-to-r from-amber-400 to-stone-400 bg-clip-text text-transparent">
-              Kia
-            </h3>
-            <div className="space-y-3 text-neutral-400">
-              <p className="hover:text-amber-400 transition-colors cursor-pointer">The Female Veterans Podcast</p>
-              <p className="hover:text-amber-400 transition-colors cursor-pointer">Hot Topics Live Podcast</p>
-              <p className="hover:text-amber-400 transition-colors cursor-pointer">Magnum Opus Multimedia</p>
-            </div>
-          </div>
-          <div>
-            <h3 className="text-xl font-semibold text-white mb-6">Quick Links</h3>
-            <div className="space-y-3">
-              <button onClick={() => onNavigate('home')} className="block hover:text-amber-400 transition-colors hover:translate-x-1 transform duration-200">Home</button>
-              <button onClick={() => onNavigate('about')} className="block hover:text-amber-400 transition-colors hover:translate-x-1 transform duration-200">About</button>
-              <button onClick={() => onNavigate('services')} className="block hover:text-amber-400 transition-colors hover:translate-x-1 transform duration-200">Services</button>
-              <button onClick={() => onNavigate('contact')} className="block hover:text-amber-400 transition-colors hover:translate-x-1 transform duration-200">Contact</button>
-            </div>
-          </div>
-          <div>
-            <h3 className="text-xl font-semibold text-white mb-6">Connect</h3>
-            <div className="space-y-3 text-neutral-400">
-              <p className="hover:text-amber-400 transition-colors">Ph: 971-266-0104</p>
-              <p className="hover:text-amber-400 transition-colors cursor-pointer">www.thefemaleveteranspodcast.com</p>
-            </div>
-          </div>
-        </div>
-        <div className="border-t border-neutral-800 pt-8 text-center">
-          <p className="text-sm text-neutral-500">
-            © 2025 Self-Sabotage Alchemy. All rights reserved.
-          </p>
-        </div>
-      </div>
-    </footer>
   );
 }
