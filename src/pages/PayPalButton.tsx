@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 
 interface PayPalButtonProps {
-  id: string;
+  id?: string;
   amount: string;
   onSuccess?: (details: any) => void;
 }
@@ -11,7 +11,9 @@ export default function PayPalButton({ id, amount, onSuccess }: PayPalButtonProp
   const buttonRendered = useRef(false);
 
   useEffect(() => {
-    if (buttonRendered.current) return; // render only once
+    // Reset flag when component mounts with new id
+    buttonRendered.current = false;
+
     if (!containerRef.current) return;
 
     const loadPaypal = async () => {
@@ -20,25 +22,22 @@ export default function PayPalButton({ id, amount, onSuccess }: PayPalButtonProp
         script.src = "https://www.paypal.com/sdk/js?client-id=sb&currency=USD";
         script.async = true;
         document.body.appendChild(script);
-        await new Promise((resolve) => {
-          script.onload = resolve;
-        });
+        await new Promise<void>((resolve) => (script.onload = () => resolve()));
       }
 
       const paypal = (window as any).paypal;
-      if (!paypal) return;
+      if (!paypal || buttonRendered.current) return;
+
+      // Clear the container before rendering
+      if (containerRef.current) {
+        containerRef.current.innerHTML = '';
+      }
 
       paypal.Buttons({
-        createOrder: (_data: any, actions: any) => {
-          return actions.order.create({
-            purchase_units: [{ amount: { value: amount } }],
-          });
-        },
-        onApprove: (_data: any, actions: any) => {
-          return actions.order.capture().then((details: any) => {
-            if (onSuccess) onSuccess(details);
-          });
-        },
+        createOrder: (_data: any, actions: any) =>
+          actions.order.create({ purchase_units: [{ amount: { value: amount } }] }),
+        onApprove: (_data: any, actions: any) =>
+          actions.order.capture().then((details: any) => onSuccess && onSuccess(details)),
         onError: (err: any) => {
           console.error(err);
           alert("Payment failed! Check console.");
@@ -49,7 +48,15 @@ export default function PayPalButton({ id, amount, onSuccess }: PayPalButtonProp
     };
 
     loadPaypal();
-  }, [amount, onSuccess]);
 
-  return <div ref={containerRef}></div>;
+    // Cleanup on unmount
+    return () => {
+      if (containerRef.current) {
+        containerRef.current.innerHTML = '';
+      }
+      buttonRendered.current = false;
+    };
+  }, [amount, onSuccess, id]);
+
+  return <div id={id} ref={containerRef}></div>;
 }
