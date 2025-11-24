@@ -284,7 +284,7 @@ function FeatureCard({ icon, title, description, color, delay }: any) {
 
 // ------------------ Transformation Timeline ------------------
 function TransformationTimeline() {
-  const weeks = [
+    const weeks = [
     { week: 1, title: "Awareness", description: "Uncover your patterns and triggers" },
     { week: 2, title: "Understanding", description: "Learn why you self-sabotage" },
     { week: 3, title: "Release", description: "Let go of what no longer serves you" },
@@ -297,12 +297,16 @@ function TransformationTimeline() {
     <section className="py-24 bg-white">
       <div className="max-w-6xl mx-auto px-6">
         <div className="text-center mb-16">
-          <h2 className="text-5xl font-extrabold text-neutral-900 mb-4">Your 6-Week Journey</h2>
-          <p className="text-xl text-neutral-600">Each week builds on the last, creating lasting transformation</p>
+          <h2 className="text-4xl md:text-5xl font-extrabold text-neutral-900 mb-4">Your 6-Week Journey</h2>
+          <p className="text-lg md:text-xl text-neutral-600">Each week builds on the last, creating lasting transformation</p>
         </div>
 
         <div className="relative">
-          <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-gradient-to-b from-amber-500 to-stone-400"></div>
+          {/* Desktop: Center line */}
+          <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-gradient-to-b from-amber-500 to-stone-400"></div>
+          
+          {/* Mobile: Left line */}
+          <div className="md:hidden absolute left-6 top-0 h-full w-1 bg-gradient-to-b from-amber-500 to-stone-400"></div>
           
           <div className="space-y-12">
             {weeks.map((week, idx) => (
@@ -333,7 +337,7 @@ function TimelineItem({ week, title, description, isLeft }: any) {
           }
         });
       },
-      { threshold: 0.5 }
+      { threshold: 0.3 }
     );
 
     observer.observe(ref.current);
@@ -367,26 +371,34 @@ function TimelineItem({ week, title, description, isLeft }: any) {
   }, [visible, week]);
 
   return (
-    <div ref={ref} className={`flex items-center ${isLeft ? 'flex-row' : 'flex-row-reverse'} gap-8`}>
-      <div className={`flex-1 ${isLeft ? 'text-right' : 'text-left'}`}>
-        <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 border border-neutral-200 hover:scale-105 inline-block">
+    <div 
+      ref={ref} 
+      className={`
+        flex items-center gap-4 md:gap-8
+        ${isLeft ? 'md:flex-row' : 'md:flex-row-reverse'}
+      `}
+    >
+      {/* Content - Mobile: always to the right, Desktop: alternates */}
+      <div className={`flex-1 ${isLeft ? 'md:text-right' : 'md:text-left'} text-left`}>
+        <div className="bg-white rounded-2xl p-4 md:p-6 shadow-lg hover:shadow-2xl transition-all duration-300 border border-neutral-200 hover:scale-105 md:inline-block w-full md:w-auto">
           <div
             className={`font-bold mb-2 transition-all duration-700 ${
-              visible ? 'text-amber-500 text-2xl scale-110' : 'text-neutral-400 text-xl'
+              visible ? 'text-amber-500 text-xl md:text-2xl scale-110' : 'text-neutral-400 text-lg md:text-xl'
             }`}
           >
             Week {count}
           </div>
-          <h3 className="text-2xl font-bold text-neutral-900 mb-2">{title}</h3>
-          <p className="text-neutral-600">{description}</p>
+          <h3 className="text-xl md:text-2xl font-bold text-neutral-900 mb-2">{title}</h3>
+          <p className="text-sm md:text-base text-neutral-600">{description}</p>
         </div>
       </div>
 
-      <div className="relative z-10">
+      {/* Circle - Mobile: on the left, Desktop: in the center */}
+      <div className="relative z-10 order-first md:order-none">
         <div
-          className={`w-12 h-12 rounded-full flex items-center justify-center font-bold shadow-lg text-white text-lg transition-all duration-700 ${
+          className={`w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center font-bold shadow-lg text-white text-base md:text-lg transition-all duration-700 ${
             visible
-              ? 'bg-gradient-to-br from-amber-500 to-stone-400 scale-125 shadow-xl animate-pulse'
+              ? 'bg-gradient-to-br from-amber-500 to-stone-400 scale-125 shadow-xl'
               : 'bg-neutral-300 text-neutral-500 scale-100'
           }`}
         >
@@ -394,8 +406,10 @@ function TimelineItem({ week, title, description, isLeft }: any) {
         </div>
       </div>
 
-      <div className="flex-1"></div>
+      {/* Desktop spacer */}
+      <div className="hidden md:block flex-1"></div>
     </div>
+
   );
 }
 

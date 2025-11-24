@@ -71,17 +71,17 @@ function App() {
   if (showLoader) {
     return (
       <div className="fixed inset-0 bg-gradient-to-br from-amber-50 via-white to-amber-100 flex items-center justify-center z-50">
-        <div className="text-center">
+        <div className="text-center px-4">
           <div className="relative mb-6">
-            <Sparkles className="w-20 h-20 text-amber-700 animate-pulse mx-auto" />
+            <Sparkles className="w-16 h-16 md:w-20 md:h-20 text-amber-700 animate-pulse mx-auto" />
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-24 h-24 border-4 border-amber-300 border-t-amber-700 rounded-full animate-spin"></div>
+              <div className="w-20 h-20 md:w-24 md:h-24 border-4 border-amber-300 border-t-amber-700 rounded-full animate-spin"></div>
             </div>
           </div>
-          <h2 className="text-3xl font-bold text-neutral-800 mb-2">
+          <h2 className="text-2xl md:text-3xl font-bold text-neutral-800 mb-2">
             Self-Sabotage Alchemy
           </h2>
-          <p className="text-neutral-600 animate-pulse">
+          <p className="text-sm md:text-base text-neutral-600 animate-pulse">
             Loading your transformation...
           </p>
         </div>
@@ -100,33 +100,33 @@ function App() {
         >
           <div className="text-center px-4">
             <div className="mb-8 relative">
-              <div className="w-24 h-24 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full mx-auto flex items-center justify-center shadow-xl">
-                <Sparkles className="w-12 h-12 text-white" />
+              <div className="w-20 h-20 md:w-24 md:h-24 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full mx-auto flex items-center justify-center shadow-xl">
+                <Sparkles className="w-10 h-10 md:w-12 md:h-12 text-white" />
               </div>
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-32 h-32 border-4 border-amber-200 rounded-full animate-ping"></div>
+                <div className="w-28 h-28 md:w-32 md:h-32 border-4 border-amber-200 rounded-full animate-ping"></div>
               </div>
             </div>
 
-            <h1 className="text-5xl md:text-6xl font-bold text-neutral-800 mb-4">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-neutral-800 mb-4">
               Welcome to Self-Sabotage Alchemy
             </h1>
-            <p className="text-xl md:text-2xl text-neutral-600 mb-8 max-w-2xl mx-auto">
+            <p className="text-lg sm:text-xl md:text-2xl text-neutral-600 mb-6 md:mb-8 max-w-2xl mx-auto">
               Transform your self-sabotage into your greatest strength
             </p>
-            <p className="text-lg text-neutral-500 mb-12">
+            <p className="text-base md:text-lg text-neutral-500 mb-8 md:mb-12">
               Discover the power within you to overcome limitations and achieve
               extraordinary success
             </p>
 
             <button
               onClick={handleGetStarted}
-              className="bg-amber-700 hover:bg-amber-800 text-white px-12 py-4 rounded-full text-lg font-semibold transition-all duration-300 hover:scale-105 shadow-xl"
+              className="bg-amber-700 hover:bg-amber-800 text-white px-8 md:px-12 py-3 md:py-4 rounded-full text-base md:text-lg font-semibold transition-all duration-300 hover:scale-105 shadow-xl"
             >
               Get Started
             </button>
 
-            <div className="mt-12 animate-bounce">
+            <div className="mt-8 md:mt-12 animate-bounce">
               <div className="w-6 h-10 border-2 border-amber-700 rounded-full mx-auto flex justify-center">
                 <div className="w-1 h-3 bg-amber-700 rounded-full mt-2 animate-pulse"></div>
               </div>
