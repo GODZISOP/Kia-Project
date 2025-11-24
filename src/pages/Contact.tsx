@@ -13,6 +13,8 @@ export default function Contact({ onNavigate }: ContactProps) {
     message: ''
   });
   const [submitted, setSubmitted] = useState(false);
+  const BACKEND_API = "https://kia-backendss.vercel.app";
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -24,7 +26,7 @@ const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
 
   try {
-    const res = await fetch("http://localhost:5000/api/contact", {
+ const res = await fetch(`${BACKEND_API}/api/contact`,  {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
