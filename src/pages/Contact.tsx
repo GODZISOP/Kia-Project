@@ -107,7 +107,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                   </li>
                   <li className="flex gap-3">
                     <span className="font-bold text-amber-700 flex-shrink-0">2.</span>
-                    <span>We'll reach out within 24 hours</span>
+                    <span>We'll reach out within  hours</span>
                   </li>
                   <li className="flex gap-3">
                     <span className="font-bold text-amber-700 flex-shrink-0">3.</span>
