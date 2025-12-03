@@ -78,7 +78,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                   icon={<Mail className="w-6 h-6" />}
                   title="Email"
                   details={['info@selffsabotagealchemy.com']}
-                  description="We'll respond within 24 hours"
+                  description="Personalized Customer Service"
                 />
 
                 <ContactInfo
@@ -107,7 +107,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                   </li>
                   <li className="flex gap-3">
                     <span className="font-bold text-amber-700 flex-shrink-0">2.</span>
-                    <span>We'll reach out within  hours</span>
+                    <span>Personalized Customer Service</span>
                   </li>
                   <li className="flex gap-3">
                     <span className="font-bold text-amber-700 flex-shrink-0">3.</span>
